@@ -8,7 +8,7 @@ const jsonPath = "./json/";
 const jsonPath2 = "./json-ergonomics/"; 
 const imagePath = "./images/"; 
 const name = "ergonomics";
-const name2 = "ergonomics-words";
+const jsonImageName = "ergonomics-image";
 
 
 /*
@@ -16,11 +16,8 @@ This web-scraping example is set up for working with wikipedia.If you want to ad
 to scrape another site you should go and inspect the site in the browser first, then adapt this. 
 */
 
-
-
-
-
 function getAllImages(soupTag){
+    //console.log(soupTag);
     let imgs = soupTag.findAll('img');
     let imgUrls = [];
 
@@ -41,7 +38,16 @@ function getAllImages(soupTag){
 
     return imgUrls;
 }
+//get all the image names and return as an array
+function getImageNames(imageUrls){
+    let imageFileNames = [];
 
+    for(let i = 0; i < imageUrls.length; i++){
+        imageFileNames.push(getName(imageUrls[i]));
+    }
+
+    return imageFileNames;
+}
 //split url on the "/" character and get the last element from 
 //the returned array which will give us the file name
 function getName(url){
@@ -105,8 +111,8 @@ function writeJSON(data){
     try {
         // let path = jsonPath+name+".json";
         //let path2 = jsonPath2+name+".json";
-        let imgPath = imagePath+name+".json";
-        fs.writeFileSync(imgPath, JSON.stringify(data, null, 2), "utf8");
+        let ImageName = jsonImageName+name+".json";
+        fs.writeFileSync(ImageName, JSON.stringify(data, null, 2), "utf8");
         console.log("JSON file successfully saved");
     } catch (error) {
         console.log("An error has occurred", error);
@@ -121,7 +127,7 @@ function createSoup(document){
     
     //find elements with an ID;
        let bodyContent = soup.find('div',{id:"bodyContent"});
-       // console.log(bodyContent);
+       //console.log(bodyContent);
        // console.log(getParaText(bodyContent));
 
     //getParaText(bodyContent) means save those data from bodyContent part;
@@ -149,9 +155,15 @@ function createSoup(document){
         "content": {}
     };
 
+let newName = [];
+for (let i =0; i < images.length ; i ++) {
+    newName =  images[i];
+}
+
     imageData.content = {
-        "imageNames": getAllImages(images),
+        "imageNames": getImageNames(images)
     };
+
     writeJSON(imageData);
     recursiveDownload(images,0);
        
