@@ -8,7 +8,7 @@ const jsonPath = "./json/";
 const jsonPath2 = "./json-ergonomics/"; 
 const imagePath = "./images/"; 
 const name = "ergonomics";
-const jsonImageName = "ergonomics-image";
+const jsonImageName = "./json-/ergonomics-image";
 
 
 /*
